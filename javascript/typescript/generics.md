@@ -181,37 +181,60 @@ Create a table that can render any object array.
 ```js
 // Table.tsx
 
-interface TableProps <T extends object>{
-    employees: T[];
-    columns: (keyof T)[];
+interface TableProps<T>{
+    data: T[];
+    columns: (keyof T)[]
 }
 
-function Table<T extends object>({employees, columns}: TableProps<T>) {
+// function Table<T extends {id: number}>({data, columns}: TableProps<T>) {
+const Table = <T extends {id: number},>({data, columns}: TableProps<T>) =>{
   return (
-    <table border={1}>
-        <thead>
-            <tr>
-                {columns.map(column => (
-                    <th key={String(column)}>
-                        {String(column)}
-                    </th>
-            ))}
-            </tr>
-        </thead>
-        <tbody>
-            {employees.map((row, index) => (
-                <tr key={index}>
-                    {columns.map(column => (
-                        <td key={String(column)}>{String(row[column])}</td>
-                    ))}
+        <table border={1}>
+            <thead>
+                <tr>
+                    {columns.map((col) => <th key={String(col)}>{String(col)}</th>)}
                 </tr>
-            ))}
-        </tbody>
-    </table>
-  )
+            </thead>
+            <tbody>
+                {data.map((row) => (
+                    <tr key={row.id}>
+                        {columns.map((col) => <td key={String(col)}>{String(row[col])}</td>)}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    )
 }
 
 export default Table
+
+/* 
+
+- For every employee, create a table row. For every column, find that property from the employee and put its value inside a table cell.
+
+- Employee → Row
+- Column   → Cell
+- row[column] → Cell value
+
+*/
+
+/* 
+
+- <T extends { id: number }> => in a .tsx file, TypeScript/JSX can interpret as beginning of JSX element.
+
+- <T extends { id: number },> => The trailing comma: makes it unambiguous: "This is a TypeScript generic parameter, not JSX."
+
+- Normal function:
+function Table<T extends { id: number }>(props) {}
+
+- Arrow function:
+const Table = <T extends { id: number },>(props) => {}
+                                      ↑
+                                   comma
+
+- Generic arrow functions in .tsx commonly use a trailing comma to distinguish the generic from JSX.
+*/
+
 ```
 
 Usage:
@@ -224,10 +247,16 @@ const employees = [
   {id: 2, name: "naveen", department: "Finance"},
 ]
 
-<Table employees = {employees} columns={["id", "name", "department"]}/> // Valid
+const products = [
+  {id: 1, name: "Laptop", price: 50000},
+  {id: 2, name: "Mobile", price: 20000},
+]
+
+<Table data = {employees} columns={["id", "name", "department"]}/> // Valid
+<Table data = {products} columns={["id", "name", "price"]}/> // Valid
 
 // Type '"Salary"' is not assignable to type '"id" | "name" | "department"'.ts(2322)
-<Table employees = {employees} columns={["Salary"]}/> // Invalid
+<Table data = {employees} columns={["Salary"]}/> // Invalid
 ```
 
 ## 6. Generic Search Component
@@ -238,14 +267,14 @@ Search using any property
 import { useState } from "react";
 
 interface SearchProps<T extends object>{
-    employees: T[];
+    data: T[];
     searchKey: keyof T;
 }
 
-function Search<T extends object>({employees, searchKey}: SearchProps<T>) {
+function Search<T extends object>({data, searchKey}: SearchProps<T>) {
   const [query, setQuery] = useState("");
   
-  const filteredData = employees.filter((employee) => String(employee[searchKey]).toLowerCase().includes(query.toLowerCase()));
+  const filteredData = data.filter((employee) => String(employee[searchKey]).toLowerCase().includes(query.toLowerCase()));
 
   return (
     <div>
@@ -272,7 +301,7 @@ const employees = [
   {id: 2, name: "naveen", department: "Finance"},
 ]
 
-<Search employees = {employees} searchKey={"department"}/>
+<Search data = {employees} searchKey={"department"}/>
 ```
 
 ## 7. Generic Form Component
