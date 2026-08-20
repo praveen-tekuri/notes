@@ -302,7 +302,7 @@ function logValue(value: logValues){}
 
 **When should we use interface and when should we use type?**
 
-- they kind of interchangable in many different scenorios.
+- they kind of interchangeable in many different scenarios.
 - we use interface anytime we trying to describe plain object.
 - we use interface anytime to extend one type with another
 - Type alias can’t be extended
@@ -413,7 +413,7 @@ Automatically figures out generic type <T> without explicitly passing it.
 const result = useState("abcd");
 ```
 
-useState is a generic function, in most scenorios we will rely on generic type inference, so we don’t need to put generic type.
+useState is a generic function, in most scenarios we will rely on generic type inference, so we don’t need to put generic type.
 
 ```tsx
 function identify<T>(value:T):T{
@@ -456,7 +456,7 @@ Use `<T>` Manually when:
 
 #### 5.3 Generic type Constraints
 
-Constraints let you restrict what types a generic can accept using extends, ensuring type safty.
+Constraints let you restrict what types a generic can accept using extends, ensuring type safety.
 
 ```tsx
 // ex: 1
@@ -499,9 +499,9 @@ function getId<T extends User>(obj:T){
 
 **Summary:**
 
-1. Primative types represents basic values like string, number, and boolean forming the foundation of type.
-2. Any disables type checking, allowing any value but sacrifysing type saftey.
+1. Primitive types represents basic values like string, number, and boolean forming the foundation of type.
+2. Any disables type checking, allowing any value but scarifying type safety.
 3. Unknown represents any value but enforces type checking before usage, making it safer than any.
 4. Interface defines contracts for object structures, enabling extension and scalable design.
-5. Type alias creates reusable type definations, supporting unions, inter-sections and primatives.
+5. Type alias creates reusable type definitions, supporting unions, inter-sections and primitives.
 6. Generics enable reusable and type-safe components by allowing dynamic types.
